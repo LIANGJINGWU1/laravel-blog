@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="en">
 <head>
-    <title>@yield('title', config('app.name', 'liangjingwu'))</title>
+    <title>@yield('title', 'Weibo App') - Laravel blog</title>
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-@yield('content')
+@include('layouts._header')
+
+<div class="container">
+
+    @yield('content')
+
+    @include('layouts._footer')
+
+</div>
 </body>
 </html>
