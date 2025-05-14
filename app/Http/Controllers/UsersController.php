@@ -34,6 +34,7 @@ class UsersController extends Controller
             'password' => bcrypt($validated['password']),
         ]);
 
+        auth()->login($user);
         return redirect()->route('users.show', ['user' => $user])->with('success', "success");
     }
 
