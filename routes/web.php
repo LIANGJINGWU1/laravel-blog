@@ -15,10 +15,10 @@ Route::get('/help', [StaticPagesController::class, 'help'])->name('help');
 Route::get('/about', [StaticPagesController::class, 'about'])->name('about');
 //注册
 Route::get('/signup', [UsersController::class, 'create'])->name('signup');
-
+//用户资源
 Route::resource('users', UsersController::class);
-
+//登录和登出
 Route::get('login', [SessionsController::class, 'create'])->name('login');
-Route::post('login', [SessionsController::class, 'store'])->name('signup');
+Route::post('login', [SessionsController::class, 'store'])->name('login');
 Route::delete('logout', [SessionsController::class, 'destroy'])->name('logout');
 
