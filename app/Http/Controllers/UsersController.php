@@ -7,8 +7,10 @@ use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Routing\Controller;
+use Illuminate\Auth\Access\AuthorizationException;
 class UsersController extends Controller
 {
     public function __construct()
@@ -46,10 +48,13 @@ class UsersController extends Controller
     }
     public function edit(User $user): Factory|Application|View
     {
+        $this->authorize('update', $user);
         return view('users.edit', ['user' => $user]);
     }
 
-    public function update(Request $request, User $user){
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $this->authorize('update', $user);
         $request->validate([
             'name' => 'required|max:50',
             'password' => 'required|string|min:6|confirmed',
