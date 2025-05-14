@@ -1,0 +1,3 @@
+{{--@foreach(['danger', 'warning'])--}}
+
+{{--@endforeach--}}
