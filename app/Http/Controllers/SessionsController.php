@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class SessionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest')->only('create');
+    }
+
     public function create(): Factory|View|Application
     {
         return view('sessions.create');
@@ -22,7 +27,10 @@ class SessionsController extends Controller
         ]);
         if (auth()->attempt($credentials, $request->has('remember'))) {
             $request->session()->regenerate();
-            return redirect()->route('users.show', auth()->user())->with('success', 'Logged in successfully.');
+//            return redirect()->route('users.show', auth()->user())->with('success', 'Logged in successfully.');
+            $fallback = route('users.show', auth()->user());
+            return redirect()->intended($fallback)->with('success', 'logged in successfully');
+
         }
         return back()->withInput()->with('danger', 'Invalid credentials.');
     }
