@@ -25,7 +25,11 @@ class SessionsController extends Controller
             return redirect()->route('users.show', auth()->user())->with('success', 'Logged in successfully.');
         }
         return back()->withInput()->with('danger', 'Invalid credentials.');
-
-
+    }
+        public function destroy(Request $request): RedirectResponse
+    {
+        auth()->logout();
+        $request->session()->invalidate();
+        return redirect('login')->with('success', 'Logged out successfully.');
     }
 }
