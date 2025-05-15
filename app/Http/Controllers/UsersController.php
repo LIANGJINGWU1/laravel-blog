@@ -9,17 +9,25 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Auth\Access\AuthorizationException;
 class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['show', 'create', 'store']);
+        $this->middleware('auth')->except(['index','show', 'create', 'store']);
 
         $this->middleware('guest')->only('create');
     }
 
+    public function index()
+    {
+        $users = User::paginate($this->perPage);
+        return view('users.index', compact('users'));
+    }
+
+    /**
+     * @return Factory|Application|View
+     */
     public function create(): Factory|Application|View
     {
         return view('users.create');
@@ -30,7 +38,11 @@ class UsersController extends Controller
         return view('users.show', ['user' => $user]);
     }
 
-    public function store(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate( [ 'name' => 'required|max:50|unique:users|string',
             'email' => 'required|string|email|unique:users',
@@ -67,6 +79,15 @@ class UsersController extends Controller
         $user->update($data);
 
         return redirect()->route('users.show', ['user' => $user])->with('success', "success");
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $this->authorize('destroy', $user);
+
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', "success");
     }
 
 
