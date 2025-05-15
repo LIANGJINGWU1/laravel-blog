@@ -10,16 +10,18 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Mail;
+
 class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index','show', 'create', 'store']);
+        $this->middleware('auth')->except(['confirmEmail','index','show', 'create', 'store']);
 
         $this->middleware('guest')->only('create');
     }
 
-    public function index()
+    public function index(): View|Application|Factory
     {
         $users = User::paginate($this->perPage);
         return view('users.index', compact('users'));
@@ -42,9 +44,13 @@ class UsersController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
+
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate( [ 'name' => 'required|max:50|unique:users|string',
+
+        //请求验证
+        $validated = $request->validate(
+        [   'name' => 'required|max:50|unique:users|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -54,10 +60,12 @@ class UsersController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
+        $this->sendEmailConfirmationTo($user);
 
-        auth()->login($user);
-        return redirect()->route('users.show', ['user' => $user])->with('success', "success");
+//        auth()->login($user);
+        return redirect()->route('home', ['user' => $user])->with('success', "已经发送激活邮件");
     }
+
     public function edit(User $user): Factory|Application|View
     {
         $this->authorize('update', $user);
@@ -78,7 +86,7 @@ class UsersController extends Controller
         }
         $user->update($data);
 
-        return redirect()->route('users.show', ['user' => $user])->with('success', "success");
+        return redirect()->route('home', ['user' => $user])->with('success', "success,Please check your email to activate your account");
     }
 
     public function destroy(User $user): RedirectResponse
@@ -90,6 +98,33 @@ class UsersController extends Controller
         return redirect()->route('users.index')->with('success', "success");
     }
 
+    protected  function sendEmailConfirmationTo(User $user): void
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'liang@liang.com';
+        $name = 'liang';
+        $to = $user->email;
+        $subject = '请确认你的邮箱Confirm your account';
+
+        //发邮件
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token): RedirectResponse
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activation_token = null;
+        $user->activated = true;
+        $user->save();
+
+        auth()->login($user);
+        return redirect()->route('users.show', ['user' => $user])->with('success', "已激活成功，正在跳转主页");
+
+    }
 
 
 }

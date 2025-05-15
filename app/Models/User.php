@@ -54,6 +54,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'remember_token',
     ];
 
     /**
@@ -65,6 +66,16 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (User $user) {
+            //生成激活令牌
+            $user->activation_token = str()->random(32);
+        });
+    }
 
     /**
      * Get the attributes that should be cast.

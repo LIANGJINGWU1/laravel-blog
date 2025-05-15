@@ -25,12 +25,19 @@ class SessionsController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
+        //auth()->attempt(...) 会自动去数据库里找 email 对应的用户，并用 Hash::check 比较密码
+        //$request->has('remember')
+        //    检查表单中是否勾选了 “记住我”
+        //    如果勾了，Laravel 会设置一个长期有效的“记住登录” cookie
         if (auth()->attempt($credentials, $request->has('remember'))) {
-            $request->session()->regenerate();
-//            return redirect()->route('users.show', auth()->user())->with('success', 'Logged in successfully.');
-            $fallback = route('users.show', auth()->user());
-            return redirect()->intended($fallback)->with('success', 'logged in successfully');
-
+            if(auth()->user()->activated){
+                $request->session()->regenerate();//重新生成 session ID，防止 Session Fixation 攻击（安全必做）。
+                $fallback = route('users.show', auth()->user());//这 intendedLaravel 重定向器提供的方法会将用户重定向到他们之前尝试访问的 URL，
+                //直到被身份验证中间件拦截。如果预期目标不可用，可以为此方法指定一个回退 URI。
+                return redirect()->intended($fallback)->with('success', 'logged in successfully');
+            }
+            auth()->logout();
+            return redirect()->route('home')->with('warning', 'Your account is not activated, please check your email.');
         }
         return back()->withInput()->with('danger', 'Invalid credentials.');
     }
