@@ -110,8 +110,8 @@ class UsersController extends Controller
         $subject = '请确认你的邮箱Confirm your account';
 
         //发邮件
-        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
-            $message->from($from, $name)->to($to)->subject($subject);
+        Mail::send($view, $data, function ($message) use ( $to, $subject) {
+            $message->to($to)->subject($subject);
         });
     }
 
