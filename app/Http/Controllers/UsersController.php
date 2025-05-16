@@ -19,6 +19,8 @@ class UsersController extends Controller
         $this->middleware('auth')->except(['confirmEmail','index','show', 'create', 'store']);
 
         $this->middleware('guest')->only('create');
+
+        $this->middleware('throttle:10,60')->only('store');
     }
 
     public function index(): View|Application|Factory

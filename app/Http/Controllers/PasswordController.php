@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,12 +16,19 @@ use Illuminate\Support\Str;
 
 class PasswordController extends Controller
 {
+
+    public function __construct()
+    {
+        //1分钟3次
+        $this->middleware('throttle:3,1')->only(['sendResetLinkEmail']);
+    }
+
     public function showLinkRequestForm(): Factory|View|Application
     {
         return  view('auth.passwords.email');
     }
 
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(Request $request): RedirectResponse
     {
         //验证邮箱
         $request->validate(['email' => 'required|email']);

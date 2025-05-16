@@ -13,6 +13,8 @@ class SessionsController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->only('create');
+        //请求限制10分钟10次
+        $this->middleware('throttle:10,10')->only('store');
     }
 
     public function create(): Factory|View|Application
