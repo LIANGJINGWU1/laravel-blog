@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StaticPagesController;
 use App\Http\Controllers\UserController;
@@ -23,3 +24,12 @@ Route::post('login', [SessionsController::class, 'store'])->name('login');
 Route::delete('logout', [SessionsController::class, 'destroy'])->name('logout');
 //验证邮箱
 Route::get('signup/confirm/{token}', [UsersController::class, 'confirmEmail'])->name('confirm_email');
+//密码重置
+Route::get('password/reset', [PasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [PasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [PasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [PasswordController::class, 'reset'])->name('password.update');
+
+
+
+
