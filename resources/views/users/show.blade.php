@@ -11,6 +11,20 @@
                             并把当前变量 $user 传进去作为子模板的 user--}}
                         @include('shared._user_info', ['user' => $user])
                     </section>
+                    <section class="status">
+                        @if($statuses->isNotEmpty())
+                            <ul class="list-unstyled">
+                                @foreach($statuses as $statue)
+                                    @include('$statuses._status')
+                                @endforeach
+                            </ul>
+                            <div class="mt-5">
+                                {!! $statuses->links() !!}
+                            </div>
+                        @else
+                            <p>没有数据</p>
+                        @endif
+                    </section>
                 </div>
             </div>
         </div>

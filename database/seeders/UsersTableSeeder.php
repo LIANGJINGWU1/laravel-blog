@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(30)->create();
+        User::factory()->count(82)->create();
 
         $user = User::find(1);
         $user->name = 'liang';
