@@ -14,8 +14,8 @@
                     <section class="status">
                         @if($statuses->isNotEmpty())
                             <ul class="list-unstyled">
-                                @foreach($statuses as $statue)
-                                    @include('$statuses._status')
+                                @foreach($statuses as $status)
+                                    @include('statuses._status')
                                 @endforeach
                             </ul>
                             <div class="mt-5">

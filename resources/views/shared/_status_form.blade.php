@@ -1,4 +1,4 @@
-<form action="{{ route('statuses.store'}}" method = "POTS">
+<form action="{{ route('statuses.store')}}" method = "post">
     @include('shared._errors')
     @csrf
     <textarea class="form-control" rows="3" placeholder="man~~" name="content">{{ old('content') }}</textarea>
