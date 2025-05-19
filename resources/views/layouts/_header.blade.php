@@ -1,11 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container ">
-        <a class="navbar-brand" href="{{ route('home') }}">weibo</a>
+        <a class="navbar-brand" href="{{ route('home') }}">
+            {{ config('app.name', 'liang`s Blog') }}
+        </a>
         <ul class="navbar-nav justify-content-end">
 {{--            <li class="nav-item"><a class="nav-link" href="{{ route("help") }}">Help</a></li>--}}
 {{--            <li class="nav-item" ><a class="nav-link" href="#">Login</a></li>--}}
             @if (Auth::check())
-                <li class="nav-item"><a class="nav-link" href="{{route('users.index')}}">用户列表</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{route('users.index')}}">Users</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ Auth::user()->name }}
@@ -18,14 +20,14 @@
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 @method('delete')
-                                <button class="btn btn-block btn-danger" type="submit" name="button">退出</button>
+                                <button class="btn btn-block btn-danger" type="submit" name="button">logout</button>
                             </form>
                         </a>
                     </div>
                 </li>
             @else
-                <li class="nav-item"><a class="nav-link" href="{{ route('help') }}">帮助</a></li>
-                <li class="nav-item" ><a class="nav-link" href="{{ route('login') }}">登录</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('help') }}">help</a></li>
+                <li class="nav-item" ><a class="nav-link" href="{{ route('login') }}">login</a></li>
             @endif
         </ul>
     </div>
