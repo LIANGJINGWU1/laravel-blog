@@ -20,7 +20,7 @@ class PasswordController extends Controller
     public function __construct()
     {
         //1分钟3次
-        $this->middleware('throttle:3,1')->only(['sendResetLinkEmail']);
+        $this->middleware('throttle:30,1')->only(['sendResetLinkEmail']);
     }
 
     public function showLinkRequestForm(): Factory|View|Application
@@ -45,8 +45,8 @@ class PasswordController extends Controller
 
         //将token，email存入数据库,用updateOrInsert保持邮箱唯一
         DB::table('password_reset_tokens')->updateOrInsert(
-            ['email' => $email,
-            'token' => hash::make($token),
+            ['email' => $email],
+            ['token' => Hash::make($token),
             'created_at' => new Carbon
             ]);
         //发送邮件
@@ -64,7 +64,7 @@ class PasswordController extends Controller
         return view('auth.passwords.reset', ['token' => $token]);
     }
 
-    public function reset(Request $request)
+    public function reset(Request $request): RedirectResponse
     {
         //验证数据
         $request->validate([
@@ -86,7 +86,7 @@ class PasswordController extends Controller
         }
 
         //获取重置密码纪录
-        $record = DB::table('password_resets')->where('email', $email)->first();
+        $record = DB::table('password_reset_tokens')->where('email', $email)->first();
 
         //如果没有记录返回错误信息
         if(!$record){

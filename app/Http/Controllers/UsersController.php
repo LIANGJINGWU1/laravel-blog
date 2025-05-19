@@ -79,7 +79,7 @@ class UsersController extends Controller
         $this->authorize('update', $user);
         $request->validate([
             'name' => 'required|max:50',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
 
         $data = $request->only(['name']);

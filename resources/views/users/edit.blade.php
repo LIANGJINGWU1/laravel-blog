@@ -15,7 +15,9 @@
                     </a>
                 </div>
                 <form method="POST" action="{{ route('users.update', $user->id )}}">
+{{--PATCH	更新部分数据（如编辑）--}}
                     @method('patch')
+
                     @csrf
                     <div class="mb-3">
                         <label for="name">名称：</label>
@@ -27,11 +29,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="password">密码：</label>
-                        <input type="password" name="password" class="form-control" value="{{ old('password') }}">
+                        <input type="password" name="password" class="form-control" value="">
                     </div>
                     <div class="mb-3">
                         <label for="password_confirmation">确认密码：</label>
-                        <input type="password" name="password_confirmation" class="form-control" value="{{ old('password_confirmation') }}">
+                        <input type="password" name="password_confirmation" class="form-control" value="">
                     </div>
                     <button type="submit" class="btn btn-primary">更新</button>
                 </form>
