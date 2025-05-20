@@ -30,8 +30,11 @@ class StatusesController extends Controller
         return redirect()->back()->with('success', "status posted successfully");
     }
 
-    public function destory(Status $status)
+    public function destory(Status $status): RedirectResponse
     {
+        $this->authorize('destroy', $status);
+        $status->delete();
 
+        return redirect()->back()->with('success', "status deleted successfully");
     }
 }

@@ -16,6 +16,7 @@ nav.navbar.navbar-expand-lg {
     margin-bottom: 20px;
 }
 
+
 /* footer */
 footer.footer { // 更明确地指定是 .footer 类的 footer 元素
     margin-top: 45px;
@@ -79,4 +80,7 @@ section.user_info{
         float: none;
         max-width: 100px;
     }
+}
+.status-delete-btn {
+    width: max-content;
 }
