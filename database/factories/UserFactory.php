@@ -23,6 +23,10 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $randomDateTime = $this->faker->dateTimeBetween('-1 years', 'now');
+        //格式化时间
+        $formattedDateTime = $randomDateTime->format('Y-m-d H:i:s');
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
@@ -30,6 +34,8 @@ class UserFactory extends Factory
             'activated' => true,
             'password' => static::$password ??= Hash::make('123456'),
             'remember_token' => Str::random(10),
+            'created_at' => $formattedDateTime,
+            'updated_at' => $formattedDateTime,
         ];
     }
 
