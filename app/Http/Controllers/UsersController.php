@@ -130,5 +130,19 @@ class UsersController extends Controller
 
     }
 
+    public function followings(User $user): Factory|Application|View
+    {
+        $users = $user->followings()->paginate(30);
+        $title = $user->name;
+        return view('users.show_follow', compact('users', 'title'));
+    }
+
+    public function followers(User $user): Factory|Application|View
+    {
+        $users = $user->followers()->paginate(30);
+        $title = $user->name . ' 的粉丝';
+        return view('users.show_follow', compact('users', 'title'));
+    }
+
 
 }
