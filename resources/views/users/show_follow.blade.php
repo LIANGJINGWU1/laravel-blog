@@ -16,6 +16,7 @@
                 </a>
                 <small class="text-muted ms-2">
                     最后活跃于: {{ $user->updated_at->diffForHumans() }}
+                </small>
             </div>
         @endforeach
     </div>

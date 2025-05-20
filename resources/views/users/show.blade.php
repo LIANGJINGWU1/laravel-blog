@@ -17,7 +17,7 @@
                     @endif
 
                     <section class="stats mt-2">
-                        @include('shared._stats', ['user' => $user])
+                        @include('shared._status', ['user' => $user])
                     </section>
                     <section class="status">
                         @if($statuses->isNotEmpty())

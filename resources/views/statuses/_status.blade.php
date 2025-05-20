@@ -9,6 +9,8 @@
     @can('destroy', $status)
         <form action="{{ route('statuses.destroy', $status->id) }}" method="POST" onsubmit="return confirm('您确定要删除本条微博吗？');">
             @csrf
+{{--            伪造请求方法（Method Spoofing)等价于）--}}
+{{--            <input type="hidden" name="_method" value="DELETE">--}}
             @method('delete')
             <button type="submit" class="btn btn-sm btn-danger status-delete-btn">删除</button>
         </form>

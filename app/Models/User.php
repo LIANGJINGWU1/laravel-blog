@@ -120,7 +120,10 @@ class User extends Authenticatable
 
     public function feed(): Builder
     {
-        $followingUserIds = $this->followings->pluck('id')->toArray();
+        //$this->followings->pluck() 访问的是一个未加载的属性，值为 null
+        //改为 $this->followings()->pluck()，使用关系方法，永远不会 null
+        $followingUserIds = $this->followings()
+            ->select('users.id')->pluck('users.id')->toArray();
         $followingUserIds[] = $this->id;
         return Status::whereIn('user_id', $followingUserIds)->
             with('user')->latest();
@@ -134,7 +137,7 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
     }
 
-    public function following(): BelongsToMany
+    public function followings(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id','user_id');
     }
@@ -148,7 +151,7 @@ class User extends Authenticatable
 //            $userIds = compact('userIds');
 //        }
         //使用sync方法前要有定义好的关系，只会添加新的记录，不删除旧记录.
-        $this->following()->sync($userIds, false);
+        $this->followings()->sync($userIds, false);
     }
 
     /**
@@ -162,7 +165,7 @@ class User extends Authenticatable
 //            $userIds = compact('userIds');
 //        }
         //detach实现定义关系，删除指定记录
-        $this->following()->detach($userIds);
+        $this->followings()->detach($userIds);
     }
 
     public function isFollowing(int $userId): bool
