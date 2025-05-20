@@ -4,10 +4,9 @@
             {{ config('app.name', 'liang`s Blog') }}
         </a>
         <ul class="navbar-nav justify-content-end">
-{{--            <li class="nav-item"><a class="nav-link" href="{{ route("help") }}">Help</a></li>--}}
-{{--            <li class="nav-item" ><a class="nav-link" href="#">Login</a></li>--}}
             @if (Auth::check())
                 <li class="nav-item"><a class="nav-link" href="{{route('users.index')}}">Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ Auth::user()->name }}

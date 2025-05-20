@@ -11,6 +11,9 @@
                             并把当前变量 $user 传进去作为子模板的 user--}}
                         @include('shared._user_info', ['user' => $user])
                     </section>
+                    <section class="stats mt-2">
+                        @include('shared._stats', ['user' => $user])
+                    </section>
                     <section class="status">
                         @if($statuses->isNotEmpty())
                             <ul class="list-unstyled">

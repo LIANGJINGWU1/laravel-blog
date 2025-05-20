@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -141,9 +141,9 @@ class User extends Authenticatable
      */
     public function follow($userIds): void
     {
-        if(is_array($userIds)) {
-            $userIds = compact('userIds');
-        }
+//        if(is_array($userIds)) {
+//            $userIds = compact('userIds');
+//        }
         //使用sync方法前要有定义好的关系，只会添加新的记录，不删除旧记录.
         $this->following()->sync($userIds, false);
     }
@@ -155,9 +155,9 @@ class User extends Authenticatable
      */
     public function unfollow($userIds): void
     {
-        if(is_array($userIds)) {
-            $userIds = compact('userIds');
-        }
+//        if(is_array($userIds)) {
+//            $userIds = compact('userIds');
+//        }
         //detach实现定义关系，删除指定记录
         $this->following()->detach($userIds);
     }
