@@ -118,9 +118,12 @@ class User extends Authenticatable
         return $this->hasMany(Status::class);
     }
 
-    public function feed(): HasMany
+    public function feed(): Builder
     {
-        return  $this->statuses()->orderBy('created_at', 'desc');
+        $followingUserIds = $this->followings->pluck('id')->toArray();
+        $followingUserIds[] = $this->id;
+        return Status::whereIn('user_id', $followingUserIds)->
+            with('user')->latest();
     }
 
     /**
