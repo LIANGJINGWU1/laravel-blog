@@ -162,9 +162,9 @@ class User extends Authenticatable
         $this->following()->detach($userIds);
     }
 
-    public function isFollowing(User $user): bool
+    public function isFollowing(int $userId): bool
     {
-        return $this->followings->contains($user->id);
+        return $this->followings->contains($userId);
     }
 
 }

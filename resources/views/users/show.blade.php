@@ -11,6 +11,11 @@
                             并把当前变量 $user 传进去作为子模板的 user--}}
                         @include('shared._user_info', ['user' => $user])
                     </section>
+
+                    @if(Auth::check())
+                        @include('users._follow_form')
+                    @endif
+
                     <section class="stats mt-2">
                         @include('shared._stats', ['user' => $user])
                     </section>

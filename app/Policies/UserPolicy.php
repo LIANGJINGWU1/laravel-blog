@@ -7,21 +7,11 @@ use App\Models\User;
 use Illuminate\Auth\Access\Response;
 class UserPolicy
 {
-    public function  viewAny(User $user):bool
-    {
-        return false;
-    }
-
-    public function view(User $user, User $model):bool
-    {
-        return false;
-    }
-
-    public function create(User $user):bool
-    {
-        return false;
-    }
-
+    /**
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
     public function update(User $user, User $model):bool
     {
         return $user->id === $model->id;
@@ -39,13 +29,11 @@ class UserPolicy
             : Response::deny("you don't have permission to delete this user");
     }
 
-    public  function restore(User $user, User $model):bool
+    public function follow(User $user, User $model):bool
     {
-            return false;
+        return $user->id !== $model->id;
     }
 
-    public function forceDelete(User $user, User $model):bool
-    {
-        return false;
-    }
+
+
 }
